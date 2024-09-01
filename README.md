@@ -1,106 +1,141 @@
 # PlotPulse - R Edition
 
-## Regression Diagnostics Visualizer
+## Table of Contents
 
-**PlotPulse** is a comprehensive R package designed to simplify and enhance the visualization of regression diagnostics for linear, generalized linear, and mixed-effects models. With easy-to-use functions and support for both static and interactive plots, PlotPulse enables users to quickly assess model performance and identify potential issues in their regression analyses.
+1. [Overview](#overview)
+2. [Features](#features)
+3. [Installation](#installation)
+4. [Usage](#usage)
+   - [Basic Example](#basic-example)
+   - [Supported Plot Types](#supported-plot-types)
+   - [Customizing Plots](#customizing-plots)
+   - [Interactive Plots](#interactive-plots)
+   - [Handling Complex Models](#handling-complex-models)
+5. [Logging](#logging)
+6. [Contributing](#contributing)
+7. [License](#license)
+8. [Acknowledgments](#acknowledgments)
 
-### Table of Contents
-- [Features](#features)
-- [Installation](#installation)
-- [Usage](#usage)
-  - [Basic Usage](#basic-usage)
-  - [Interactive Plots](#interactive-plots)
-  - [Saving Plots](#saving-plots)
-- [Plot Types](#plot-types)
-- [Customization](#customization)
-- [Contributing](#contributing)
-- [License](#license)
+---
 
-### Features
+## Overview
 
-- **Supports multiple model types**: Works with `lm`, `glm`, and `lme4` models.
-- **Multiple diagnostic plots**: Generate residual plots, QQ plots, scale-location plots, Cook's distance plots, and more.
-- **Interactive plotting**: Leverage `ggplot2` and `plotly` to create interactive diagnostic plots.
-- **Customizable**: Fine-tune your plots with various parameters and theme options.
-- **Save plots**: Save your diagnostic plots directly to a file with customizable dimensions and formats.
+**PlotPulse** is an R package designed to streamline the process of visualizing regression diagnostics for various model types, including linear models, generalized linear models, random forests, and support vector machines. It provides a collection of functions that generate common diagnostic plots such as residual plots, QQ plots, scale-location plots, Cook's distance plots, and more. PlotPulse also supports the visualization of decision boundaries and partial dependence plots for machine learning models, enhancing the interpretability of complex models.
 
-### Installation
+## Features
 
-To install PlotPulse, simply clone this repository and source the `plot_model` function directly:
+- **Support for Multiple Model Types**: `lm`, `glm`, `randomForest`, `svm`, and `rpart` models are supported.
+- **Comprehensive Plotting Options**: Generate a variety of diagnostic plots such as:
+  - Residual Plot
+  - QQ Plot
+  - Scale-Location Plot
+  - Cook's Distance Plot
+  - Residuals vs. Leverage Plot
+  - Partial Dependence Plot (for random forests)
+  - Decision Boundary Plot (for SVMs)
+- **Interactive Plots**: Create interactive visualizations using `plotly`.
+- **Customizable**: Fine-tune the appearance and behavior of plots with extensive customization options.
+- **Plot Saving Functionality**: Save your plots directly to a file with the ability to create directories as needed.
 
-```
-# Clone the repository
-git clone https://github.com/yourusername/PlotPulse-R.git
+## Installation
 
-# Source the function
-source("path_to_your_file/plot_model.R")
-```
+To install and load PlotPulse, use the following commands:
 
-### Usage
+```r
+# Install from GitHub (example)
+# install.packages("devtools")
+# devtools::install_github("yourusername/PlotPulse")
 
-#### Basic Usage
-
-You can easily generate a variety of diagnostic plots using the `plot_model` function. Here are some examples:
-
-```
-# Load required libraries
+# Load the library
 library(ggplot2)
 library(plotly)
+library(randomForest)
+library(e1071)
+library(rpart)
+library(pdp)
+```
 
-# Create a linear model
+## Usage
+
+### Basic Example
+
+To get started, fit a model and pass it to the `plot_model` function:
+
+```r
+# Example with linear model
 model <- lm(mpg ~ wt, data = mtcars)
-
-# Generate a residual plot
 plot_model(model, plot_type = "residual")
-
-# Generate a QQ plot
-plot_model(model, plot_type = "qq")
 ```
 
-#### Interactive Plots
+### Supported Plot Types
 
-For more dynamic analysis, you can generate interactive plots using the `interactive` parameter:
+- **Residual Plot**: Visualizes residuals vs fitted values.
+- **QQ Plot**: Compares the distribution of standardized residuals with a normal distribution.
+- **Scale-Location Plot**: Checks the homoscedasticity assumption.
+- **Cook's Distance Plot**: Identifies influential observations.
+- **Residuals vs. Leverage Plot**: Examines influential data points.
+- **Partial Dependence Plot**: Shows the effect of a variable on the prediction (for random forests).
+- **Decision Boundary Plot**: Visualizes the decision boundary of SVM models.
 
-```
-# Generate an interactive Cook's distance plot
-plot_model(model, plot_type = "cooks", interactive = TRUE)
-```
+### Customizing Plots
 
-#### Saving Plots
+You can customize the appearance and save the plots:
 
-Save your plots for reporting or further analysis with the `save_path` parameter:
-
-```
-# Save a residual plot to a file
-plot_model(model, plot_type = "residual", save_path = "plots/residual_plot.pdf", create_dir = TRUE)
-```
-
-### Plot Types
-
-PlotPulse supports the following diagnostic plots:
-
-- **Residual Plot**: Visualizes the residuals against fitted values.
-- **QQ Plot**: Assesses the normality of residuals.
-- **Scale-Location Plot**: Checks the spread of residuals against fitted values.
-- **Cook's Distance Plot**: Identifies influential data points.
-- **Residuals vs Leverage Plot**: Detects potential outliers.
-- **Cook's Distance vs Leverage Plot**: Combines Cook's distance with leverage.
-
-### Customization
-
-PlotPulse allows you to customize various aspects of the plots. You can modify plot titles, axis labels, themes, and more:
-
-```
-plot_params <- list(
-  main = "Custom Title",
-  xlab = "Custom X-axis Label",
-  ylab = "Custom Y-axis Label",
-  theme = theme_light()
+```r
+plot_model(
+  model, 
+  plot_type = "residual", 
+  color = "darkred", 
+  plot_params = list(
+    main = "Customized Residual Plot",
+    xlab = "Fitted Values",
+    ylab = "Residuals",
+    theme = theme_classic()
+  ),
+  save_path = "plots/residual_plot.pdf",
+  create_dir = TRUE
 )
-
-plot_model(model, plot_type = "residual", plot_params = plot_params, color = "red")
 ```
 
-### License
+### Interactive Plots
 
-PlotPulse is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+Enable interactive plots with `interactive = TRUE`:
+
+```r
+interactive_plot <- plot_model(model, plot_type = "qq", interactive = TRUE)
+interactive_plot
+```
+
+### Handling Complex Models
+
+For more complex models like random forests and SVMs, you can specify additional parameters:
+
+```r
+# Random Forest Partial Dependence Plot
+model_rf <- randomForest(mpg ~ wt + hp, data = mtcars)
+plot_model(model_rf, X = mtcars[, c("wt", "hp")], plot_type = "partial_dependence")
+
+# SVM Decision Boundary Plot
+model_svm <- svm(Species ~ ., data = iris)
+plot_model(model_svm, X = iris[, -5], y = iris$Species, plot_type = "decision_boundary")
+```
+
+## Logging
+
+PlotPulse includes a logging utility that provides detailed messages about the process. This can be enabled or disabled through the `verbose` parameter:
+
+```r
+plot_model(model, plot_type = "residual", verbose = TRUE)
+```
+
+## Contributing
+
+Contributions to PlotPulse are welcome! If you have ideas for improvements or have found bugs, feel free to create an issue or submit a pull request on GitHub.
+
+## License
+
+PlotPulse is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
+
+## Acknowledgments
+
+PlotPulse uses several powerful R packages under the hood, including `ggplot2`, `plotly`, `randomForest`, and `e1071`. Thanks to the authors and contributors of these packages for their excellent work.
