@@ -39,21 +39,39 @@
 
 ## Installation
 
-To install and load PlotPulse, use the following commands:
+To install and load PlotPulse, follow these steps:
 
-```r
-# Install from GitHub (example)
-# install.packages("devtools")
-# devtools::install_github("yourusername/PlotPulse")
+1. **Install Required Packages**  
+   Ensure you have the necessary dependencies installed. If you don't have them, install them using the following command:
 
-# Load the library
-library(ggplot2)
-library(plotly)
-library(randomForest)
-library(e1071)
-library(rpart)
-library(pdp)
-```
+   ```r
+   install.packages(c("ggplot2", "plotly", "randomForest", "e1071", "rpart", "pdp"))
+   ```
+
+2. **Install PlotPulse**  
+   Since PlotPulse is hosted on GitHub, you can install it directly using the `devtools` package:
+
+   ```r
+   # Install devtools if you haven't already
+   install.packages("devtools")
+
+   # Install PlotPulse from GitHub
+   devtools::install_github("YaBoiSwayZ/PlotPulse")
+   ```
+
+3. **Load the Library**  
+   Once installed, load PlotPulse along with its dependencies:
+
+   ```r
+   library(ggplot2)
+   library(plotly)
+   library(randomForest)
+   library(e1071)
+   library(rpart)
+   library(pdp)
+   ```
+
+Now you're ready to start using PlotPulse for your regression diagnostics and visualizations!
 
 ## Usage
 
